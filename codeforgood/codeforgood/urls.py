@@ -32,6 +32,8 @@ urlpatterns = [
 
     path('hod/home',principal_views.home,name='principal-home'),
     path('teacher/visualise', teacher_views.visualise, name = 'teacher-visualise'),
+    path('principal/visualise', principal_views.visualise, name = 'principal-visualise'),
+
     path('redirectingurl',teacher_views.redirectingview,name='redirectingurl'),
 
     
