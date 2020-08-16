@@ -26,7 +26,7 @@ class Question(models.Model):
 class Response(models.Model):
 
 	question=models.ForeignKey(Question,on_delete=models.CASCADE)
-	teacher=models.ForeignKey(Teacher)
+	teacher=models.ForeignKey(Teacher,on_delete=models.DO_NOTHING)
 	student=models.ForeignKey(Student,on_delete=models.CASCADE)
 	answer=models.CharField(max_length=255)
 	description=models.CharField(max_length=255)

@@ -9,9 +9,9 @@ choices=(
 # Create your models here.
 class Student(models.Model):
 	uid=models.CharField(max_length=10,default='#')
-    name=models.CharField(max_length=50,default='#')
-	gender=models.CharField(max_length=4,default='#',choices=choices)
-	teacher=models.ForeignKey(Teacher)
+	name=models.CharField(max_length=50,default='#')
+	gender=models.CharField(max_length=6,default='#',choices=choices)
+	teacher=models.ForeignKey(Teacher,on_delete=models.DO_NOTHING)
 
 	def __str__ (self):
 
