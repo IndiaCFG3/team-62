@@ -28,6 +28,10 @@ urlpatterns = [
     path('hod/home',principal_views.home,name='principal-home'),
 
     path('redirectingurl',teacher_views.redirectingview,name='redirectingurl'),
+
+    
+    path('teacher/<int:id>/',teacher_views.show_questions,name='show_questions'),
+
     path('changepassword',teacher_views.change_password,name="changepassword"),
     path('password-reset/',
          auth_views.PasswordResetView.as_view(

@@ -1,5 +1,8 @@
 from django.shortcuts import render,redirect
 from principal.models import Principal
+from student.models import Student
+from teacher.models import Teacher
+from course.models import Course,Question,Response,StudentFilledStatus
 
 from django.contrib.auth.decorators import login_required
 
@@ -8,9 +11,19 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 
 # Create your views here.
+choices=[
+    "Collaboration","Critical Thinking","Risk Taking"
+]
 
 def home(request):
-    return render(request,"teacher/home.html")
+	curr_teacher=Teacher.objects.filter(user=request.user).first()
+	filled_students=StudentFilledStatus.objects.filter(status="Filled",student__teacher=curr_teacher)
+	print(filled_students)
+	context={
+		'students':filled_students
+	}
+	return render(request,"teacher/home.html",context=context)
+    
 
 
 def redirectingview(request):
@@ -19,6 +32,85 @@ def redirectingview(request):
 		return redirect('principal-home')
 
 	return redirect('teacher-home')
+
+
+@login_required
+def show_questions(request,id):
+	courses={}
+	for course in choices:
+		course_obj=Course.objects.filter(skill=course).first()
+		questions=list(Question.objects.filter(course=course_obj).values_list('question',flat=True))
+		courses[course]=questions
+	print(courses)
+	# course_exit_status_objects = CourseExitStatus.objects.filter(course=course_obj,student=student)
+
+	# if len(course_exit_status_objects)!=0:
+	# 	return render(request,'student/already_submitted.html')
+
+	# index = [(i+1) for i in range(len(questions))]
+	# questions_with_index = list(zip(index,questions))
+	flag = True
+
+	if request.method == 'POST':
+
+		# for index,question in questions_with_index:
+		# 	answer = str(request.POST.get(str(index),""))
+
+		# 	if answer == '':
+		# 		flag = False
+
+		# if flag:
+
+		# 	for index,question in questions_with_index:
+		# 		answer = str(request.POST.get(str(index),""))
+
+		# 		response_obj = Response(question=question,student=student,answer=answer)
+		# 		response_obj.save()
+
+		# 	course_exit_status_obj = CourseExitStatus(course=course_obj,student=student,status="Filled")
+		# 	course_exit_status_obj.save()
+		# 	messages.success(request,f'Your Response has been recorded!')
+		# 	return redirect('student-home')
+		# else:
+		# 	messages.warning(request,f'Please, Answer all the questions!')
+		curr_student=Student.objects.filter(id=id).first()
+		curr_teacher=Teacher.objects.filter(user=request.user).first()
+		for course in courses:
+			for question in courses[course]:
+				checkbox=request.POST.get(question,"")
+				reason=request.POST.get(question+" reason","")
+				if checkbox!="":
+					if reason=="":
+						messages.warning(request,f'Please, Fill the description for all checked questions!')
+						flag=False
+					else:
+						question=Question.objects.filter(question=question).first()
+						response_obj=Response(question=question,teacher=curr_teacher,student=curr_student,answer=question,description=reason)
+						response_obj.save()
+				else:
+					if reason!="":
+						messages.warning(request,f'Please, Check the checkbox first!')
+						flag=False
+		if flag:
+			student_filled_status_obj = StudentFilledStatus(student=curr_student,status="Filled")
+			student_filled_status_obj.save()
+			messages.success(request,f'Your Response has been recorded!')
+			return redirect('teacher-home')
+
+
+
+
+
+
+
+	# print(questions_with_index[0])
+
+	context = {
+			'courses':courses
+		}
+
+	return render(request,'teacher/show_questions.html',context=context)
+
 
 @login_required
 def change_password(request):

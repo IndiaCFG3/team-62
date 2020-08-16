@@ -1,6 +1,9 @@
 {% extends 'course/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}	
-	<h1>Teacher Home</h1>>
+	<h1>Teacher Home</h1>
+	{% for student in students %}
+	<a href="{% url 'show_questions' student.id %}"><p>{{ student.name }}</p></a>
+	{% endfor %}
 
 {% endblock content %}	 
