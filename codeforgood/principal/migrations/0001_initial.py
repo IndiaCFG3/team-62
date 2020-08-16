@@ -11,16 +11,14 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('principal', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Teacher',
+            name='Principal',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('fid', models.CharField(default='#', max_length=10)),
-                ('principal', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='principal.principal')),
                 ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
