@@ -3,6 +3,8 @@ from principal.models import Principal
 from student.models import Student
 from teacher.models import Teacher
 from course.models import Course,Question,Response
+from django.db.models import Count
+import json
 
 from django.contrib.auth.decorators import login_required
 
@@ -14,7 +16,6 @@ from django.contrib.auth import update_session_auth_hash
 choices=[
     "Collaboration","Critical Thinking","Risk Taking"
 ]
-
 def home(request):
 	curr_teacher=Teacher.objects.filter(user=request.user).first()
 	filled_students=Student.objects.filter(filled=False)
@@ -34,6 +35,19 @@ def redirectingview(request):
 		return redirect('principal-home')
 
 	return redirect('teacher-home')
+
+def visualise(request):
+	answers = []
+	total = []
+	countList = list(Response.objects.all().values('answer').annotate(total=Count('answer')).order_by('total'))
+# [{'answer': 'I have a main idea of the given presentation', 'total': 1}, {'answer': 'I share my opinions', 'total': 1}]	print(countList)
+	for i in countList:
+		answers.append(i["answer"])
+		total.append(i["total"])
+	print(answers)
+	print(total)
+	context = {"answers" : json.dumps(answers), "total" : json.dumps(total)}
+	return render(request, "teacher/visualise.html", context = context)
 
 
 @login_required

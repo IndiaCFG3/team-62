@@ -26,7 +26,7 @@ urlpatterns = [
     path('logout/',auth_views.LogoutView.as_view(template_name="teacher/logout.html"),name='logout'),
     path('teacher/home',teacher_views.home,name='teacher-home'),
     path('hod/home',principal_views.home,name='principal-home'),
-
+    path('teacher/visualise', teacher_views.visualise, name = 'teacher-visualise'),
     path('redirectingurl',teacher_views.redirectingview,name='redirectingurl'),
 
     
