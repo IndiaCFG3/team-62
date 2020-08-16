@@ -1,11 +1,10 @@
 from django.db import models
+from student.models import Student
+from teacher.models import Teacher
 
 # Create your models here.
 class Course(models.Model):
-	cname=models.CharField(max_length=100)
-	branch=models.CharField(max_length=4)
-	year=models.CharField(max_length=2)
-	sem=models.CharField(max_length=1)
+	cname=models.CharField(max_length=100,default="#")
 
 	def __str__ (self):
 
@@ -21,15 +20,19 @@ class Question(models.Model):
 
 		return "{} - {}".format(self.course.cname,self.question)
 
-	def get_absolute_url(self):
-		return reverse('show_questions',kwargs={'id':self.course.id})
+	# def get_absolute_url(self):
+	# 	return reverse('show_questions',kwargs={'id':self.course.id})
 
 class Response(models.Model):
 
 	question=models.ForeignKey(Question,on_delete=models.CASCADE)
-	student=models.ForeignKey(Student,models.CASCADE)
+	teacher=models.ForeignKey(Teacher)
+	student=models.ForeignKey(Student,on_delete=models.CASCADE)
 	answer=models.CharField(max_length=255)
+	description=models.CharField(max_length=255)
+	bias=models.BooleanField(default=False)
+    
 
 	def __str__ (self):
 
-		return "{} - {}".format(self.student.user.first_name+" "+self.student.user.last_name,self.question.course.cname)
+		return "{} - {}".format(self.teacher.name,self.student.name)
