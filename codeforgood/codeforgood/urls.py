@@ -30,6 +30,8 @@ urlpatterns = [
     path('teacher/<int:id>',principal_views.studentbyTeacher,name='principal-teacher'),
     path('teacher/form/<int:id>',principal_views.studentForm,name='student-form'),
 
+    path('hod/home',principal_views.home,name='principal-home'),
+    path('teacher/visualise', teacher_views.visualise, name = 'teacher-visualise'),
     path('redirectingurl',teacher_views.redirectingview,name='redirectingurl'),
 
     
