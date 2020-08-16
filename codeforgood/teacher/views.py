@@ -18,8 +18,8 @@ choices=[
 ]
 def home(request):
 	curr_teacher=Teacher.objects.filter(user=request.user).first()
-	filled_students=Student.objects.filter(filled=False)
-	available_students=False if len(Student.objects.filter(filled=False))==0 else True
+	filled_students=Student.objects.filter(filled=False, teacher = curr_teacher)
+	available_students=False if len(Student.objects.filter(filled=False, teacher = curr_teacher))==0 else True
 	print(filled_students)
 	context={
 		'students':filled_students,
@@ -37,9 +37,10 @@ def redirectingview(request):
 	return redirect('teacher-home')
 
 def visualise(request):
+	curr_teacher=Teacher.objects.filter(user=request.user).first()
 	answers = []
 	total = []
-	countList = list(Response.objects.all().values('answer').annotate(total=Count('answer')).order_by('total'))
+	countList = list(Response.objects.filter(teacher=curr_teacher).values('answer').annotate(total=Count('answer')).order_by('total'))
 # [{'answer': 'I have a main idea of the given presentation', 'total': 1}, {'answer': 'I share my opinions', 'total': 1}]	print(countList)
 	for i in countList:
 		answers.append(i["answer"])
