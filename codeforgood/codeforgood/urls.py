@@ -25,12 +25,15 @@ urlpatterns = [
     path('',auth_views.LoginView.as_view(template_name="teacher/login.html"),name='login'),
     path('logout/',auth_views.LogoutView.as_view(template_name="teacher/logout.html"),name='logout'),
     path('teacher/home',teacher_views.home,name='teacher-home'),
-    path('hod/home',principal_views.home,name='principal-home'),
+    path('principal/home',principal_views.home,name='principal-home'),
+
+    path('teacher/<int:id>',principal_views.studentbyTeacher,name='principal-teacher'),
+    path('teacher/form/<int:id>',principal_views.studentForm,name='student-form'),
 
     path('redirectingurl',teacher_views.redirectingview,name='redirectingurl'),
 
     
-    path('teacher/<int:id>/',teacher_views.show_questions,name='show_questions'),
+    path('teacher/student/<int:id>/',teacher_views.show_questions,name='show_questions'),
 
     path('changepassword',teacher_views.change_password,name="changepassword"),
     path('password-reset/',

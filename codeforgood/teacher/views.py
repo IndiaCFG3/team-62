@@ -17,8 +17,8 @@ choices=[
 
 def home(request):
 	curr_teacher=Teacher.objects.filter(user=request.user).first()
-	filled_students=Student.objects.filter(filled=False)
-	available_students=False if len(Student.objects.filter(filled=False))==0 else True
+	filled_students=Student.objects.filter(filled=False,teacher=curr_teacher)
+	available_students=False if len(Student.objects.filter(filled=False,teacher=curr_teacher))==0 else True
 	print(filled_students)
 	context={
 		'students':filled_students,
@@ -36,6 +36,9 @@ def redirectingview(request):
 	return redirect('teacher-home')
 
 
+
+
+
 @login_required
 def show_questions(request,id):
 	courses={}
@@ -44,13 +47,6 @@ def show_questions(request,id):
 		questions=list(Question.objects.filter(course=course_obj).values_list('question',flat=True))
 		courses[course]=questions
 	print(courses)
-	# course_exit_status_objects = CourseExitStatus.objects.filter(course=course_obj,student=student)
-
-	# if len(course_exit_status_objects)!=0:
-	# 	return render(request,'student/already_submitted.html')
-
-	# index = [(i+1) for i in range(len(questions))]
-	# questions_with_index = list(zip(index,questions))
 	flag = True
 
 	if request.method == 'POST':
