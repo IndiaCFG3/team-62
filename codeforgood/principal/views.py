@@ -6,10 +6,14 @@ from student.models import Student
 from course.models import Response,Course,Question
 from django.db.models import Count
 
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 choices=[
     "Collaboration","Critical Thinking","Risk Taking"
 ]
+
+@login_required
 def home(request):
     principal=Principal.objects.filter(user=request.user).first()
     all_teachers=Teacher.objects.filter(principal=principal)
@@ -19,6 +23,7 @@ def home(request):
     }
     return render(request,"principal/home.html",context=context)
 
+@login_required
 def studentbyTeacher(request,id):
 	curr_teacher=Teacher.objects.filter(id=id).first()
 	filled_students=Student.objects.filter(teacher=curr_teacher)
@@ -28,7 +33,7 @@ def studentbyTeacher(request,id):
 	}
 	return render(request,"principal/homebyId.html",context=context)
 
-
+@login_required
 def studentForm(request,id):
     student_obj=Student.objects.filter(id=id).first()
 
@@ -51,7 +56,8 @@ def studentForm(request,id):
         'courses':courses
     }
     return render(request,"principal/show_form.html",context=context)
-		
+
+@login_required		
 def visualise(request):
 	# curr_teacher=Teacher.objects.filter(user=request.user).first()
 	answers = []

@@ -16,6 +16,8 @@ from django.contrib.auth import update_session_auth_hash
 choices=[
     "Collaboration","Critical Thinking","Risk Taking"
 ]
+
+@login_required
 def home(request):
 	curr_teacher=Teacher.objects.filter(user=request.user).first()
 	filled_students=Student.objects.filter(filled=False,teacher=curr_teacher)
@@ -28,7 +30,7 @@ def home(request):
 	return render(request,"teacher/home.html",context=context)
     
 
-
+@login_required
 def redirectingview(request):
 
 	if len(Principal.objects.filter(user=request.user))!=0:
@@ -36,6 +38,7 @@ def redirectingview(request):
 
 	return redirect('teacher-home')
 
+@login_required
 def visualise(request):
 	curr_teacher=Teacher.objects.filter(user=request.user).first()
 	answers = []
@@ -65,27 +68,6 @@ def show_questions(request,id):
 	flag = True
 
 	if request.method == 'POST':
-
-		# for index,question in questions_with_index:
-		# 	answer = str(request.POST.get(str(index),""))
-
-		# 	if answer == '':
-		# 		flag = False
-
-		# if flag:
-
-		# 	for index,question in questions_with_index:
-		# 		answer = str(request.POST.get(str(index),""))
-
-		# 		response_obj = Response(question=question,student=student,answer=answer)
-		# 		response_obj.save()
-
-		# 	course_exit_status_obj = CourseExitStatus(course=course_obj,student=student,status="Filled")
-		# 	course_exit_status_obj.save()
-		# 	messages.success(request,f'Your Response has been recorded!')
-		# 	return redirect('student-home')
-		# else:
-		# 	messages.warning(request,f'Please, Answer all the questions!')
 		curr_student=Student.objects.filter(id=id).first()
 		curr_teacher=Teacher.objects.filter(user=request.user).first()
 		for course in courses:
@@ -109,14 +91,6 @@ def show_questions(request,id):
 			curr_student.save(update_fields=["filled"])
 			messages.success(request,f'Your Response has been recorded!')
 			return redirect('teacher-home')
-
-
-
-
-
-
-
-	# print(questions_with_index[0])
 
 	context = {
 			'courses':courses

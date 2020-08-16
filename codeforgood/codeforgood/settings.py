@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'principal.apps.PrincipalConfig',
     'student.apps.StudentConfig',
     'teacher.apps.TeacherConfig',
+    'jazzmin',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
