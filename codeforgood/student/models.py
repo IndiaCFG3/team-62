@@ -12,6 +12,7 @@ class Student(models.Model):
 	name=models.CharField(max_length=50,default='#')
 	gender=models.CharField(max_length=6,default='#',choices=choices)
 	teacher=models.ForeignKey(Teacher,on_delete=models.DO_NOTHING)
+	filled=models.BooleanField(default=False)
 
 	def __str__ (self):
 

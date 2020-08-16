@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from principal.models import Principal
 from student.models import Student
 from teacher.models import Teacher
-from course.models import Course,Question,Response,StudentFilledStatus
+from course.models import Course,Question,Response
 
 from django.contrib.auth.decorators import login_required
 
@@ -17,10 +17,12 @@ choices=[
 
 def home(request):
 	curr_teacher=Teacher.objects.filter(user=request.user).first()
-	filled_students=StudentFilledStatus.objects.filter(status="Filled",student__teacher=curr_teacher)
+	filled_students=Student.objects.filter(filled=False)
+	available_students=False if len(Student.objects.filter(filled=False))==0 else True
 	print(filled_students)
 	context={
-		'students':filled_students
+		'students':filled_students,
+		'available':available_students
 	}
 	return render(request,"teacher/home.html",context=context)
     
@@ -92,8 +94,8 @@ def show_questions(request,id):
 						messages.warning(request,f'Please, Check the checkbox first!')
 						flag=False
 		if flag:
-			student_filled_status_obj = StudentFilledStatus(student=curr_student,status="Filled")
-			student_filled_status_obj.save()
+			curr_student.filled=True
+			curr_student.save(update_fields=["filled"])
 			messages.success(request,f'Your Response has been recorded!')
 			return redirect('teacher-home')
 

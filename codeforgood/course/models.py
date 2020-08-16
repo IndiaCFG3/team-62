@@ -43,11 +43,11 @@ class Response(models.Model):
 
 		return "{} - {}".format(self.teacher.user.first_name,self.student.name)
 
-class StudentFilledStatus(models.Model):
-	# teacher=models.ForeignKey(Teacher,on_delete=models.DO_NOTHING)
-	student=models.ForeignKey(Student,on_delete=models.CASCADE)
-	status=models.CharField(max_length=10,default="Not Filled")
+# class StudentFilledStatus(models.Model):
+# 	# teacher=models.ForeignKey(Teacher,on_delete=models.DO_NOTHING)
+# 	student=models.ForeignKey(Student,on_delete=models.CASCADE)
+# 	status=models.CharField(max_length=10,default="Not Filled")
 
-	def __str__ (self):
+# 	def __str__ (self):
 
-		return "{}".format(self.status)
+# 		return "{}".format(self.status)

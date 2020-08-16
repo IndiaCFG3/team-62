@@ -3,6 +3,7 @@
 {% block content %}	
 
 <div class="row">
+		{% if available %}
 		{% for student in students %}
 	
 		
@@ -18,6 +19,11 @@
 	
 		
 	  {% endfor %}
+	  {% else %}
+	  <p>All Done</p>
+	  {% endif %}
+	  
+	  
 </div>
 
 {% endblock content %}	 
